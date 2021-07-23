@@ -1,11 +1,10 @@
-﻿using System;
-using Core.Entities;
+﻿using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Config
 {
-   public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
@@ -18,6 +17,7 @@ namespace Infrastructure.Data.Config
                 .HasForeignKey(p => p.ProductBrandId);
             builder.HasOne(t => t.ProductType).WithMany()
                 .HasForeignKey(p => p.ProductTypeId);
+            builder.HasMany<Variant>(x => x.Variants);
         }
     }
 }
