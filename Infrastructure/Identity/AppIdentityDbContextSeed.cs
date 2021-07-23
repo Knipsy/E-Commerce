@@ -25,7 +25,8 @@ namespace Infrastructure.Identity
                         City = "New York",
                         State = "NY",
                         Zipcode = "90210"
-                    }
+                    },
+                    Type = Type.Admin
                 };
                 await userManager.CreateAsync(user, "Pa$$w0rd");
             }

@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using System.Collections.Generic;
+using Core.Entities;
 
 namespace API.Dtos
 {
@@ -11,6 +12,15 @@ namespace API.Dtos
         public string PictureUrl { get; set; }
         public string ProductType { get; set; }
         public string ProductBrand { get; set; }
+        public List<VariantToReturnDto> Variants { get; set; }
+    }
 
+    public class VariantToReturnDto
+    {
+        public bool IsDefault { get; set; }
+        public string PictureUrl { get; set; }
+        public int Size { get; set; }
+        public string Color { get; set; }
+        public int Quantity { get; set; }
     }
 }

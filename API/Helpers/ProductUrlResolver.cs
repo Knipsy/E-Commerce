@@ -1,10 +1,10 @@
-﻿ using System;
- using API.Dtos;
- using AutoMapper;
- using Core.Entities;
- using Microsoft.Extensions.Configuration;
+﻿using System.Linq;
+using API.Dtos;
+using AutoMapper;
+using Core.Entities;
+using Microsoft.Extensions.Configuration;
 
- namespace API.Helpers
+namespace API.Helpers
 {
     public class ProductUrlResolver : IValueResolver<Product, ProductToReturnDto, string>
     {
@@ -16,11 +16,13 @@
         }
         public string Resolve(Product source, ProductToReturnDto destination, string destMember, ResolutionContext context)
         {
-            if (!string.IsNullOrEmpty(source.PictureUrl))
+            if (source.Variants != null)
             {
-                return _config["ApiUrl"] + source.PictureUrl;
+                if (!string.IsNullOrEmpty(source.Variants.FirstOrDefault(x => x.IsDefault)?.PictureUrl))
+                {
+                    return _config["ApiUrl"] + source.Variants.FirstOrDefault(x => x.IsDefault)?.PictureUrl;
+                }
             }
-
             return null;
         }
     }

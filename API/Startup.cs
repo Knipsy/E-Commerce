@@ -1,19 +1,17 @@
-using System;
-using System.IO;
 using API.Extensions;
 using API.Helpers;
 using API.Middleware;
 using AutoMapper;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
+using System.IO;
 
 
 namespace API
@@ -25,7 +23,7 @@ namespace API
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
-          
+
         }
 
 
@@ -60,10 +58,10 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
+
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
-         
+
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
                 var configuration = ConfigurationOptions.Parse(
@@ -87,14 +85,14 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
+
             //if (env.IsDevelopment())
             //{
             //    app.UseDeveloperExceptionPage();
             //}
             app.UseMiddleware<ExceptionMiddleware>();
 
-           
+
             app.UseStatusCodePagesWithReExecute("errors/{0}");
 
             app.UseHttpsRedirection();
@@ -104,14 +102,15 @@ namespace API
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(),"Content")
-                    ),RequestPath = "/content"
+                    Path.Combine(Directory.GetCurrentDirectory(), "Content")
+                    ),
+                RequestPath = "/content"
             });
             app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwaggerDocumention();
-          
+
 
             app.UseEndpoints(endpoints =>
             {
