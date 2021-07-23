@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Core.Entities;
 
@@ -10,10 +11,12 @@ namespace Core.Specifications
             : base(x =>
                 (string.IsNullOrEmpty(productParams.Search)||x.Name.ToLower().Contains(productParams.Search))&&
                 (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
-                (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId)
+                (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId) &&
+                (x.Variants != null || x.Variants.Select(d => d.IsDefault).FirstOrDefault())
             )
         {
             AddInclude(x=>x.ProductType);
+            AddInclude(x => x.Variants);
             AddInclude(x=>x.ProductBrand);
             AddOrderBy(x=>x.Name);
             ApplyPaging(productParams.PageSize*(productParams.PageIndex-1),productParams.PageSize);
@@ -39,6 +42,7 @@ namespace Core.Specifications
         {
             AddInclude(x => x.ProductType);
             AddInclude(x => x.ProductBrand);
+            AddInclude(x => x.Variants);
         }
 
     }
